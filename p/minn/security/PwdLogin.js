@@ -3,14 +3,13 @@
 * @qq:394286006
 */
 import React,{Component} from 'react';
-import {Modal,Button,Alert,View, TouchableHighlight,TextInput,Text,StyleSheet,Image,DeviceEventEmitter} from 'react-native';
+import {Modal,Button,Alert,View, TouchableHighlight,TextInput,Text,StyleSheet,Image,DeviceEventEmitter,Platform} from 'react-native';
 import {Select, Option} from "react-native-chooser";
 import MainConstant from '../utils/MainConstant';
 import MinnUtil from '../utils/MinnUtil';
-import HttpUtil from '../utils/HttpUtil';
 import UserAction from '../actions/UserAction';
 import UserStore from '../stores/UserStore';
-class UserLogin extends Component {
+class PwdLogin extends Component {
   constructor(props) {
     super(props);
     this.parentView=props.parentView;
@@ -45,7 +44,7 @@ class UserLogin extends Component {
        this.minnUtil.setLogin(true);
        state.data.locale=this.minnUtil.getCurrentLocale();
        this.minnUtil.setUserInfo(state.data);
-       this.parentView.loginStatus('logined');
+       this.parentView.parentView.loginStatus('logined');
      }
 
   }
@@ -89,11 +88,14 @@ class UserLogin extends Component {
     if(showerror){
         this.setState({validationState:validationState,helpBlock:helpBlock});
     }else{
-      this.userAction.login(name,pwd);
+      this.userAction.login(name,pwd,this.minnUtil.getCurrentLocale().split('_')[0]);
     }
 
     }
 
+    goQrCodeLogin(event){
+       this.parentView.changeLoginType('qrcode');
+    }
    render() {
     return (
       <View style={styles.form}>
@@ -137,6 +139,15 @@ class UserLogin extends Component {
               accessibilityLabel={this.minnUtil.get('login_action')}
             />
           </View>
+          <View style={styles.errorView} >
+          </View>
+          <View style={styles.singleView} >
+            <Button
+                onPress={this.goQrCodeLogin.bind(this)}
+                title={this.minnUtil.get('login_qrcode')}
+                accessibilityLabel={this.minnUtil.get('login_qrcode')}
+              />
+          </View>
         </View>
 
     );
@@ -175,7 +186,14 @@ const styles = StyleSheet.create({
   },
   singleView:{
     width: 200,
-    height: 25,
+    ...Platform.select({
+      ios: {
+          height: 25,
+      },
+      android: {
+        height: 40,
+      },
+    }),
     justifyContent:'space-between',
     backgroundColor : "#d3d5d6"
   },errorView:{
@@ -194,4 +212,4 @@ const styles = StyleSheet.create({
     left:35
   }
 });
-export default UserLogin;
+export default PwdLogin;

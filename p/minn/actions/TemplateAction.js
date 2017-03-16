@@ -14,6 +14,7 @@ class TemplateAction{
          'Content-Type': 'application/json'},body:JSON.stringify(param)})
           .then((response) =>  response.text())
           .then((responseText) => {
+            console.log('responseText:'+responseText);
            let action = {
             store:this.store,
             actionType: actionType,

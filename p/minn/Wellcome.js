@@ -10,33 +10,49 @@ import {
   TouchableHighlight,
   StyleSheet,
   Image,
-  RecyclerViewBackedScrollView
+  RecyclerViewBackedScrollView,
+  Platform
 } from 'react-native';
 import MainConstant from './utils/MainConstant';
 import MinnUtil from './utils/MinnUtil';
 import ReportAnalysis from './components/ReportAnalysis';
 import UserAnalysis from './components/UserAnalysis';
 import LogAnalysis from './components/LogAnalysis';
+import QRCodeLogin from './security/QRCodeLogin';
+import UserAction from './actions/UserAction';
+import UserStore from './stores/UserStore';
 export default class Wellcome extends Component{
   constructor(props) {
     super(props);
     this.minnUtil=MinnUtil.getInstance(window);
+    this.userStore=new UserStore(this,this.minnUtil);
+    this.userAction=new UserAction(this.userStore);
   }
+  componentWillMount() {
+  this.userStore.addChangeListener(this.onChange.bind(this));
+    }
+    onChange(state) {
+      if(state.actionType=='qrCodeloginSuccess'){
+         this.props.navigator.pop();
+       }
 
+    }
   goReport(event) {
-    this.props.onForward(this.minnUtil.get('wellcome_reportanalysis'),ReportAnalysis);
+    this.props.onForward(this.minnUtil.get('wellcome_reportanalysis'),ReportAnalysis,{parentView:this});
   }
 
   goUser(event) {
-    this.props.onForward(this.minnUtil.get('wellcome_useranalysis'),UserAnalysis);
+    this.props.onForward(this.minnUtil.get('wellcome_useranalysis'),UserAnalysis,{parentView:this});
   }
   goLog(event) {
-    this.props.onForward(this.minnUtil.get('wellcome_loganalysis'),LogAnalysis);
+    this.props.onForward(this.minnUtil.get('wellcome_loganalysis'),LogAnalysis,{parentView:this});
   }
 
-componentWillMount() {
-
+  goPc(event) {
+      this.props.onForward(this.minnUtil.get('login_scanlogin'),QRCodeLogin,{parentView:this,cancelButtonVisible:false});
   }
+
+
   render() {
     return (
       <View style={styles.container}>
@@ -75,7 +91,15 @@ componentWillMount() {
            </Text>
          </View>
      </TouchableHighlight>
-   </View>
+     <TouchableHighlight   style={styles.highlight} onPress={this.goPc.bind(this)}>
+          <View style={styles.labeLink}>
+            <Image style={styles.thumb} source={{uri:MainConstant.url+MainConstant.app+'/assets/qrcode.png'}} />
+            <Text style={styles.text}>
+            {this.minnUtil.get('login_scanlogin')}
+            </Text>
+          </View>
+      </TouchableHighlight>
+    </View>
  </View>
     );
   }

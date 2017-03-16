@@ -3,7 +3,7 @@
 * @qq:394286006
 */
 class MinnUtil {
-  constructor(doc) {  
+  constructor(doc) {
     this.global=doc.GLOBAL.global;
     this.locale=this.global.currentLocale;
     this.properties=this.global.messageResource.properties;
@@ -47,6 +47,9 @@ static getInstance(doc){
 
     setLogin(b){
       this.global.isLogin=b;
+    }
+    isLogin(){
+      return this.global.isLogin;
     }
     setUserInfo(value){
       this.global.userInfo=value;

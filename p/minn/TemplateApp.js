@@ -32,10 +32,11 @@ import MinnUtil from './utils/MinnUtil';
    renderScene(route, navigator) {
      let Component = route.component;
      return (
-       <Component {...route.params} navigator={navigator} onForward={ (title,component) => {
+       <Component {...route.params} navigator={navigator} onForward={ (title,component,params) => {
               navigator.push({
                 title: title,
                 component: component,
+                params:params
               });
             }}/>
      );

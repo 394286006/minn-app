@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import MinnUtil from './p/minn/utils/MinnUtil';
 import AppStore from './p/minn/stores/AppStore';
-import UserLogin from './p/minn/security/UserLogin.ios';
+import UserLogin from './p/minn/security/UserLogin';
 import MainApp from './p/minn/MainApp.ios';
 export default class minnApp extends Component {
 
