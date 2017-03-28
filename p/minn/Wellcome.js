@@ -19,14 +19,19 @@ import ReportAnalysis from './components/ReportAnalysis';
 import UserAnalysis from './components/UserAnalysis';
 import LogAnalysis from './components/LogAnalysis';
 import QRCodeLogin from './security/QRCodeLogin';
+import BarCodeReader from './utils/BarCodeReader';
 import UserAction from './actions/UserAction';
 import UserStore from './stores/UserStore';
+import BarCodeAction from './actions/BarCodeAction';
+import BarCodeStore from './stores/BarCodeStore';
 export default class Wellcome extends Component{
   constructor(props) {
     super(props);
     this.minnUtil=MinnUtil.getInstance(window);
     this.userStore=new UserStore(this,this.minnUtil);
     this.userAction=new UserAction(this.userStore);
+    this.barCodeStore=new BarCodeStore(this,this.minnUtil);
+    this.barCodeAction=new BarCodeAction(this.barCodeStore);
   }
   componentWillMount() {
   this.userStore.addChangeListener(this.onChange.bind(this));
@@ -51,7 +56,9 @@ export default class Wellcome extends Component{
   goPc(event) {
       this.props.onForward(this.minnUtil.get('login_scanlogin'),QRCodeLogin,{parentView:this,cancelButtonVisible:false});
   }
-
+  goBarcode(event) {
+      this.props.onForward(this.minnUtil.get('wellcome_barcodereader'),BarCodeReader,{parentView:this,cancelButtonVisible:false});
+  }
 
   render() {
     return (
@@ -99,6 +106,14 @@ export default class Wellcome extends Component{
             </Text>
           </View>
       </TouchableHighlight>
+      <TouchableHighlight   style={styles.highlight} onPress={this.goBarcode.bind(this)}>
+           <View style={styles.labeLink}>
+             <Image style={styles.thumb} source={{uri:MainConstant.url+MainConstant.app+'/assets/barcode.png'}} />
+             <Text style={styles.text}>
+             {this.minnUtil.get('wellcome_barcodereader')}
+             </Text>
+           </View>
+       </TouchableHighlight>
     </View>
  </View>
     );

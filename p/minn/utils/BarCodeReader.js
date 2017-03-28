@@ -11,7 +11,7 @@ var {
 } = ReactNative;
 import Camera from 'react-native-camera';
 
-var QRCodeLogin = React.createClass({
+var BarCodeReader = React.createClass({
 
   propTypes: {
     cancelButtonVisible: React.PropTypes.bool,
@@ -32,12 +32,7 @@ var QRCodeLogin = React.createClass({
   _onPressCancel: function() {
     var $this = this;
     requestAnimationFrame(function() {
-      if($this.props.navigator){
         $this.props.navigator.pop();
-      }else{
-          $this.parentView.changeLoginType('pwd');
-      }
-
     });
   },
 
@@ -47,13 +42,7 @@ var QRCodeLogin = React.createClass({
       this.barCodeFlag = false;
       setTimeout(function() {
         //Vibration.vibrate();
-          if($this.props.navigator){
-            $this.parentView.userAction.loginPcByQrCode('',result.data,$this.parentView.minnUtil.getCurrentLocale());
-        }else{
-            $this.parentView.handleChangeLanguage(result.data);
-            $this.parentView.userAction.loginByQrCode(result.data);
-        }
-
+        $this.parentView.barCodeAction.barCode(result.data);
 
       }, 1000);
     }
@@ -113,10 +102,11 @@ var styles = StyleSheet.create({
   },
 
   rectangle: {
-    height: 250,
+    marginTop:-150,
+    height: 1,
     width: 250,
     borderWidth: 2,
-    borderColor: '#00FF00',
+    borderColor: 'red',
     backgroundColor: 'transparent',
   },
 
@@ -136,4 +126,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = QRCodeLogin;
+module.exports = BarCodeReader;
