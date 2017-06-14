@@ -19,7 +19,7 @@ module.exports = {
   		   {name:'한국의 (한국)', locale:'ko_KR',isLoad:false}],
     messageResource:null
           },
-   url:'http://192.168.1.2:8080',
+   url:'http://13.58.227.12:8080',
    app:'/admin',
    UNKNOWN:'unknown',
    PREFIX_AUTO_COMPOMENT:'dynamy',
